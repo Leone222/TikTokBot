@@ -97,9 +97,6 @@ def back_to_sponsors():
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 
-# Function to initialize the database
-
-
 @group_router.message(Command('menu'))
 async def menu(message: types.Message, state: FSMContext):
     await message.reply('Главное меню', reply_markup=main_keyboard())
