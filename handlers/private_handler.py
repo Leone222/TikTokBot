@@ -7,7 +7,7 @@ import re
 import sqlite3
 from config import api, admin_us
 
-# Initialize the bot and router
+
 user_private_router = Router()
 
 def keyboard():
@@ -16,7 +16,6 @@ def keyboard():
     ]
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
-# Function to download video from the new API
 def download(url):
     api_url = "https://tiktok-video-no-watermark2.p.rapidapi.com/"
     payload = {
@@ -24,7 +23,7 @@ def download(url):
         "hd": "1"
     }
     headers = {
-        "x-rapidapi-key": api,  # Replace with your actual RapidAPI key
+        "x-rapidapi-key": api,
         "x-rapidapi-host": "tiktok-video-no-watermark2.p.rapidapi.com"
     }
     
@@ -35,7 +34,7 @@ def download(url):
         if 'data' in data and 'play' in data['data']:
             return data['data']['play']
     else:
-        print("Failed to fetch video")  # Debugging: Print the error details
+        print("Failed to fetch video")
     
     return None
 
@@ -49,7 +48,7 @@ def init_db():
 
 
 
-# Function to create the subscription keyboard
+
 def sub_keyboard():
     buttons = [
         [
@@ -65,7 +64,6 @@ def sub_keyboard():
         buttons.insert(0, [InlineKeyboardButton(text="Подписаться", url=f'https://t.me/{groups[1]}')])
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
-# Function to check if a user is subscribed to the channel
 async def is_subscribed(user_id):
     conn = sqlite3.connect('database.db', check_same_thread=False)
     cursor = conn.cursor()
@@ -127,7 +125,6 @@ async def process_subscription(callback_query: types.CallbackQuery):
     
     if await is_subscribed(user_id):
         await bot.send_message(user_id, "Спасибо за подписку! Теперь вы можете отправить ссылку на видео TikTok.")
-        # Update the user record to mark subscription verified
         conn = sqlite3.connect('database.db', check_same_thread=False)
         cursor = conn.cursor()
         cursor.execute("UPDATE users SET username = ? WHERE user_id = ?", (callback_query.from_user.username or '0', user_id))
